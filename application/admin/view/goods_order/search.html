@@ -1,0 +1,124 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+
+{/block}
+
+{block name="main"}
+<style>
+    .input-group .form-control, .input-group-addon, .input-group-btn {
+        margin: 10px 10px 0px 0px;
+        width: 20%;
+        display: table-cell;
+    }
+    .input-group-btn{
+        width: 10%;
+    }
+    .btn-group-sm>.btn, .btn-sm {
+        padding: 5px 40px;
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 5px;
+    }
+</style>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">订单列表</h5>
+                    <div class="col-sm-3 navbar-right"  style=" margin-bottom: 20px;width: 99%;">
+                        <form action="/admin/goods_order/search" method="post">
+                            <div class="input-group">
+                                <input type="text" name="order_sn" value="{$param.order_sn}" placeholder="订单号" class="input-sm form-control">
+                                <input type="text" name="goods_name" value="{$param.goods_name}" placeholder="商品名称" class="input-sm form-control">
+                                <input type="text" name="real_name" value="{$param.real_name}" placeholder="收货姓名" class="input-sm form-control">
+                                <input type="text" name="mobile" value="{$param.mobile}" placeholder="收货电话" class="input-sm form-control">
+                                <input type="text" class="input-sm form-control" placeholder="请选择开始日期" value="{$param.start_time}" name="start_time" id="start_time" autocomplete="off">
+                                <input type="text" class="input-sm form-control" placeholder="请选择结束日期" value="{$param.end_time}" name="end_time" id="end_time" autocomplete="off">
+                                <select id="select-type" name="factory_id" class="input-sm form-control input-s-sm inline">
+                                    <option value="">请选择厂家</option>
+                                    {foreach $factory as $v}
+                                    <option value="{$v.id}" {if condition="$param.factory_id == $v.id"} selected {/if}>{$v.name}</option>
+                                    {/foreach}
+                                </select>
+                                <select name="status" class="input-sm form-control input-s-sm inline">
+                                    <option value="">请选择状态</option>
+                                    <option value="3" {if condition="$param.status == 3"} selected {/if}>未支付</option>
+                                    <option value="0" {if condition="$param.status == 0"} selected {/if}>待发货</option>
+                                    <option value="1" {if condition="$param.status == 1"} selected {/if}>已发货</option>
+                                    <option value="2" {if condition="$param.status == 2"} selected {/if}>已完成</option>
+                                </select>
+                                    <span class="input-group-btn">
+                                            <button type="submit"  class="btn btn-sm btn-primary"> 搜索</button>
+                                    </span>
+                                    <span class="input-group-btn" style="padding-left: 10px;">
+                                            <a href="/admin/goods_order/index" class="btn btn-sm btn-primary">清除</a>
+                                    </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>订单编号</th>
+                            <th>商品名称</th>
+                            <th>规格</th>
+                            <th>单价</th>
+                            <th>数量</th>
+                            <th>Drink</th>
+                            <th>姓名</th>
+                            <th>电话</th>
+                            <th>地址</th>
+                            <th>时间</th>
+                            <th>状态</th>
+                            <th>操 作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $list as $v}
+                        <tr>
+                            <td>{$v.order_sn}</td>
+                            <td>{$v.goods_name}</td>
+                            <td>{$v.guige}</td>
+                            <td>{$v.price}</td>
+                            <td>X{$v.num}</td>
+                            <td>{$v.drink}</td>
+                            <td>{$v.real_name}</td>
+                            <td>{$v.mobile}</td>
+                            <td>{$v.address}</td>
+                            <td>{$v.created_at}</td>
+                            <td>{$v.status == 0 ? '待发货':$v.status == 3 ? '未支付' : $v.status == 1 ? '已发货' : '已完成'}</td>
+                            <td>
+                                {if condition="$v.status eq 0"}
+                                <a href="{:url('GoodsOrder/fahuo',['id'=>$v.id])}" class="btn label label-info">发货</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                    {$page|raw}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script src="__PUBLIC__/laydate/laydate.js"></script>
+<script>
+    laydate.render({
+        elem: '#start_time' //指定元素
+    });
+    laydate.render({
+        elem: '#end_time' //指定元素
+    });
+</script>
+
+{/block}

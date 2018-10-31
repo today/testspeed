@@ -1,0 +1,67 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                    <div class="ibox-tools" >
+                        <a style="border:1px solid #b4b6b8;padding:5px;" href="{:url('mining/add_mining')}" >
+                            添加矿产
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>矿名</th>
+                            <th>数量/个</th>
+                            <th>频率/次</th>
+                            <th>所属</th>
+                            <th>操 作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $list as $v}
+                        <tr>
+                            <td>{$v.min_id}</td>
+                            <td><img src="{$v.tok_img}" width="30" alt="">{$v.tok_name}</td>
+                            <td>{$v.min_number}</td>
+                            <td>{$v.min_frequency}</td>
+                            <td>{$v.min_level == 1 ? 'VIP':'普通'}</td>
+                            <td>
+                                <a href="{:url('mining/update_mining',['id'=>$v.min_id])}" class="btn label label-info">编辑</a>
+
+                                <a href="javascript:;" attr-message="矿产：{$v.tok_name}" attr-id="{$v.min_id}"  class="btn label label-danger attr-del">删除</a>
+
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script>
+    var SCOPE ={
+        'del_url':'{:url("admin/mining/mining_delete")}'
+    }
+
+</script>
+{/block}

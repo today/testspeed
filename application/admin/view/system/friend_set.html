@@ -1,0 +1,158 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+<link rel="stylesheet" href="__PUBLIC__/css/my.css">
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <section>
+        <div class="row m-t-sm">
+            <div class="col-lg-12">
+                <div class="panel blank-panel">
+                    <div class="panel-heading">
+                        <div class="panel-options">
+                            <ul class="nav nav-tabs">
+                                <li style="padding-right: 30px"><h5 style="font-size: 18px;">{$title}</h5></li>
+                                {foreach name="group_list" item='group' key='kk'}
+                                <li {if condition="$kk eq 'friend_set' "} class='active' {/if} ><a href="{:url('system/index',['c_type'=>$kk])}" >{$group}</a></li>
+                                {/foreach}
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div id="explanation" class="explanation" style="">
+            <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o" style="color:gold"></i>
+                <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+                <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+            </div>
+            <ul>
+                <li>请勿随意修改,修改前请确认数据是否正确</li>
+                <li>邀请规则非常重要!!!</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+
+        <div class="ibox-content">
+            <div class="text-danger fa-2x">友情提示: <span class="text-danger">如不增加算力或币种,请在数量后填入0</span></div>
+            <div class="hr-line-dashed"></div>
+
+            <form class="form-horizontal" id="signupForm" action="{:url('admin/system/'.$c_type)}" method="post">
+                {:token()}
+                <input type="hidden" name="c_type" value="{$c_type}">
+                <div class="form-group"><label class="col-lg-2 control-label">邀请好友功能开启</label>
+                    <div class="col-lg-3">
+                        <select class="form-control m-b" name="friend_on" datatype="*" nullmsg="请选择矿产代币" errormsg="请选择矿产代币！">
+                            <option value="1" {if $config['friend_on'] == 1 }selected{/if} >开启</option>
+                            <option value="-1" {if $config['friend_on'] == -1 }selected{/if}>关闭</option>
+                        </select>
+                    </div>
+                    <div class="Validform_checktip"></div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group"><label class="col-lg-2 control-label">强制填写邀请码</label>
+                    <div class="col-lg-3">
+                        <select class="form-control m-b" name="firend_compel" datatype="*" nullmsg="请选择矿产代币" errormsg="请选择矿产代币！">
+                            <option value="1" {if $config['firend_compel'] == 1 }selected{/if} >强制</option>
+                            <option value="-1" {if $config['firend_compel'] == -1 }selected{/if} >不强制</option>
+                        </select>
+                    </div>
+                    <div class="Validform_checktip"></div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group"><label class="col-lg-2 control-label">酿力类型</label>
+                    <div class="col-lg-3">
+                        <select class="form-control m-b" name="firend_power_type" datatype="*" nullmsg="请选择矿产代币" errormsg="请选择矿产代币！">
+                            <option value="1" {if $config['firend_power_type'] == 1 }selected{/if} >永久酿力</option>
+                            <option value="-1" {if $config['firend_power_type'] == -1 }selected{/if} >临时酿力</option>
+                        </select>
+                    </div>
+                    <div class="Validform_checktip"></div>
+                </div>
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group"><label class="col-lg-2 control-label">酿力值</label>
+                    <div class="col-lg-3"><input type="text" name="firend_power_num" datatype="n" class="form-control" value="{$config['firend_power_num']}"></div>
+                    <div class="Validform_checktip"></div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group"><label class="col-lg-2 control-label">赠送矿产类型</label>
+                    <div class="col-lg-2">
+                        <select class="form-control m-b" name="friend_mining_coin" datatype="*" nullmsg="请选择矿产代币" errormsg="请选择矿产代币！">
+                            {foreach $token as $k=>$v}
+                            <option value="{$k}" {if $config['friend_mining_coin'] == $k} selected {/if}>{$v}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <label class="col-lg-1 control-label">数量+</label>
+                    <div class="col-lg-2">
+                        <input type="text" name="friend_mining_num" errormsg="赠送数量最多保留5位小数" datatype="/^\d+(\.\d{1,5})?$/" class="form-control" value="{$config['friend_mining_num']}">
+                    </div>
+                    <div class="Validform_checktip"></div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-6 col-sm-offset-2">
+                        <button class="btn btn-primary" type="submit">修改邀请规则</button>
+                        <button class="btn btn-danger" style="margin-left: 50px;" onclick="clearPower()" type="button">清空临时算力</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/Validform_v5.3.2_min.js"></script>
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script>
+    function clearPower() {
+        layer.open({
+            content: "<span class='text-danger'>您确定要清除用户临时算力吗？<br/>这是一个不可恢复的操作</span>",
+            title: "<span class='text-danger'>这个操作很重要,需谨慎处理!!!</span>",
+            icon: 2,
+            btn: ['是', '否'],
+            yes: function (index,layero) {
+            $.ajax({
+                type:'post',
+                dataType:'json',
+                url:"{:url('system/clearPower')}",
+                success:function(msg){
+                  if(msg.code == 1) {
+                      layer.open({title:'算力清除提示',content:'算力清除成功',icon:1});
+                  }else{
+                      layer.open({title:'算力清除提示',content:msg.msg,icon:2});
+                  }
+                }
+            })
+            }
+        })
+    }
+
+    $(document).ready(function(){
+        $('#signupForm').Validform({
+            tiptype:2,
+
+            beforeSubmit:function(){
+                return true;
+            }
+        });
+    })
+</script>
+{/block}

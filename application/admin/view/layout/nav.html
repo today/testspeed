@@ -1,0 +1,42 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element"> <span>
+                            <!--<img alt="image" class="img-circle" src="img/profile_small.jpg" />-->
+                             </span>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{:session('adm_nickname','','admin')}</strong>
+                             </span> <span class="text-muted text-xs block">{:session('adm_username','','admin')} <b class="caret"></b></span> </span> </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="{:url('admin/admin/pwd_save')}">修改密码</a></li>
+                        <!--<li><a href="mailbox.html">Mailbox</a></li>-->
+                        <li class="divider"></li>
+                        <li><a href="{:url('admin/admin/logout')}">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    IN+
+                </div>
+            </li>
+
+            {foreach name="getMenuArr" item="vo" key="k"}
+                {if condition="isset($vo.child)"}
+                <li class="">
+                    <a href="#"><i class="fa {$vo.ico}"></i> <span class="nav-label">{$vo.name}</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level collapse">
+                        {foreach $vo.child as $mv}
+                        <li id="{$mv['op'].'_'.$mv['act']|strtolower}"><a href="{:url($mv['op'].'/'.$mv['act'])}">{$mv.name}</a></li>
+                        {/foreach}
+                    </ul>
+                </li>
+                {else /}
+                <li class="">
+                    <a id="{$vo['op'].'_'.$vo['act']|strtolower}" href="{:url($vo['op'].'/'.$vo['act'])}"><i class="fa {$vo.ico}"></i> <span class="nav-label">{$vo.name}</span></a>
+                </li>
+                {/if}
+            {/foreach}
+        </ul>
+
+    </div>
+</nav>

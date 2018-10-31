@@ -1,0 +1,65 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+<link rel="stylesheet" href="__PUBLIC__/css/my.css">
+<link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="signupForm" action="{:url('admin/pwd_save')}" method="post">
+                        {:token()}
+                        <div class="form-group"><label class="col-lg-2 control-label">旧管理密码</label>
+                            <div class="col-lg-7"><input type="password" name="adm_password" value="" placeholder="请输入旧密码" datatype="*6-16" nullmsg="请填写账号" errormsg="注册账号为5-20位，不包含特殊字符"   class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">新管理密码</label>
+                            <div class="col-lg-7"><input type="password" name="password" value="" datatype="*6-16"  placeholder="请输入新密码" class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">重复新密码</label>
+                            <div class="col-lg-7"><input type="password" name="repassword" value="" datatype="*" recheck="password"  placeholder="请重新输入新密码" class="form-control"></div>
+                            <td><div class="Validform_checktip"></div></td>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">确认提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/Validform_v5.3.2_min.js"></script>
+
+<script>
+    $(document).ready(function(){
+
+        $('#signupForm').Validform({
+            tiptype:2,
+
+            beforeSubmit:function(){
+              return true;
+            }
+        });
+    })
+</script>
+{/block}

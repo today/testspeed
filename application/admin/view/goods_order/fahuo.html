@@ -1,0 +1,87 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+<link rel="stylesheet" href="__PUBLIC__/css/my.css">
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <section>
+          <div class="ibox-title">
+            <h5 style="font-size: 18px;">发货</h5>
+           </div>
+        <div class="ibox-content">
+            <form class="form-horizontal" id="signupForm" action="{:url('/admin/goods_order/fahuocl/id/'.$oid)}" method="post">
+                {:token()}
+                <input type="hidden" name="oid" value="{$oid}">
+                 <div class="form-group">
+                    <label class="col-lg-2 control-label">订单编号</label>
+                    <div class="col-lg-5">
+                       {$orderid}
+                    </div>
+                   </div>
+                     <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">商品名称</label>
+                    <div class="col-lg-5">
+                       {$goods_name}
+                    </div>
+                   </div>
+                     <div class="hr-line-dashed"></div>
+                     <div class="form-group">
+                    <label class="col-lg-2 control-label">规格</label>
+                    <div class="col-lg-5">
+                       {$guige}
+                    </div>
+                   </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">客户备注</label>
+                    <div class="col-lg-5">
+                        {$remark}
+                    </div>
+                </div>
+
+                     <div class="hr-line-dashed"></div>
+                <div class="form-group"><label class="col-lg-2 control-label">是否发货</label>
+                    <div class="col-lg-5">
+                        <select class="form-control m-b" name="status" readonly="true" errormsg="请选择是否发货！">
+                            <option value="0">待发货</option>
+                            <option value="1">已发货</option>
+                            <!--<option value="2">已完成</option>-->
+                        </select>
+                    </div>
+                 </div>
+                   <div class="hr-line-dashed"></div>
+                 <div class="form-group">
+                    <label class="col-lg-2 control-label">快递名称</label>
+                    <div class="col-lg-5">
+                        <input type="text" name="delivery_method"  class="form-control" value="">
+                    </div>
+                   </div>
+                     <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                     <label class="col-lg-2 control-label">快递单号</label>
+                    <div class="col-lg-5">
+                        <input type="number" name="delivery_sn"  class="form-control" value="">
+                    </div>
+                    <div class="Validform_checktip"></div>
+                </div>
+                  <div class="hr-line-dashed"></div>
+                 <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-2">
+                        <button class="btn btn-primary" type="submit">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/Validform_v5.3.2_min.js"></script>
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+{/block}

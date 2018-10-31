@@ -1,0 +1,166 @@
+{extend name="layout:layout" /}
+
+{block name="css"}
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="widget style1 navy-bg">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-cubes fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> 平台永久算力 </span>
+                        <h2 class="font-bold">{$sys['sys_computing_power']}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="widget style1 lazur-bg">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-group fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> 平台总人数</span>
+                        <h2 class="font-bold">{$sys['sys_user_num']}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="widget style1 yellow-bg">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-magic fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> 平台临时算力</span>
+                        <h2 class="font-bold">{$sys['sys_sort_power']}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="widget style1 red-bg">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-user fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> 今日增加用户</span>
+                        <h2 class="font-bold">{$nowUser}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="row">-->
+        <!--<div class="col-lg-6">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--<div class="ibox-title">-->
+                    <!--<h5>Line Chart Example-->
+                        <!--<small>With custom colors.</small>-->
+                    <!--</h5>-->
+                <!--</div>-->
+                <!--<div class="ibox-content">-->
+                    <!--<div>-->
+                        <!--<canvas id="lineChart" height="140"></canvas>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-lg-6">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--<div class="ibox-title">-->
+                    <!--<h5>Bar Chart Example</h5>-->
+                <!--</div>-->
+                <!--<div class="ibox-content">-->
+                    <!--<div>-->
+                        <!--<canvas id="barChart" height="140"></canvas>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+{/block}
+
+{block name="js"}
+<!-- ChartJS-->
+<script src="__PUBLIC__/js/plugins/chartJs/Chart.min.js"></script>
+<!--<script src="__PUBLIC__/js/demo/chartjs-demo.js"></script>-->
+
+<script>
+    $(function(){
+        var lineData = {
+            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            datasets: [
+
+                {
+                    label: "Data 1",
+                    backgroundColor: 'rgba(26,179,148,0.5)',
+                    borderColor: "rgba(26,179,148,0.7)",
+                    pointBackgroundColor: "rgba(26,179,148,1)",
+                    pointBorderColor: "#fff",
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                },{
+                    label: "Data 2",
+                    backgroundColor: 'rgba(220, 220, 220, 0.5)',
+                    pointBorderColor: "#fff",
+                    data: [65, 59, 80, 81, 56, 55, 40]
+                }
+            ]
+        };
+
+        var lineOptions = {
+            responsive: true
+        };
+
+
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        new Chart(ctx, {type: 'line', data: lineData, options:lineOptions});
+    })
+
+    newsList_img();
+    function newsList_img() {
+        ajax({
+            type: 'POST',
+            url: wap_url+'/index/index/books',
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    var datalist = data.result;
+                    var html = "";
+                    if (datalist == "" || datalist == null || datalist == undefined) {
+                        return;
+                    }
+                    for (var i = 0; i < datalist.length; i++) {
+                        html +='<div class="book-box" >';
+                        html +='<div class="fl">';
+                        html +='<img src="' +datalist[i].b_img+ '">';
+                        html +='</div>';
+                        html +='<div class="fr">';
+                        html +='<p class="book-p1"><a target="_blank" href="' +datalist[i].b_url+ '">' +datalist[i].b_name+ '</a></p>';
+                        html +='<p class="book-p2">' +datalist[i].b_desc+ '</p>';
+                        html +='<p class="book-p3">';
+                        html +='<span>￥' +datalist[i].b_price/100+ '</span>';
+                        html +='<a target="_blank" href="' +datalist[i].b_url+ '">立即购买</a>';
+                        html +='</p>';
+                        html +='</div>';
+                        html +='</div>';
+                    }
+                    $("#books_link").html(html);
+                } else {
+                    layer.alert(data.message, {title: ' ', btnAlign: 'c'});
+                }
+            }
+        });
+    }
+</script>
+{/block}

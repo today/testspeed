@@ -1,0 +1,75 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+{/block}
+
+{block name="main"}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <section>
+        <div id="explanation" class="explanation" style="">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o" style="color:gold"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>一个权限对应一个或多个操作集合</li>
+        </ul>
+    </div>
+    </section>
+    <section>
+        <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                    <div class="ibox-tools" >
+                        <a style="border:1px solid #b4b6b8;padding:5px;" href="{:url('system_menu/create_menu')}" >
+                          <i class="fa fa-plus"></i>  添加权限
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>名 称</th>
+                            <th>所属分组</th>
+                            <th>权限码</th>
+                            <th>操 作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $list as $v}
+                            <tr>
+                                <td>{$v.sm_id}</td>
+                                <td>{$v.sm_name}</td>
+                                <td>{$rolemenu[$v.sm_group]}</td>
+                                <td>{$v.sm_right}</td>
+                                <td>
+                                    <a href="{:url('admin/systemMenu/create_menu',['id'=>$v.sm_id])}" class="btn label label-info">编辑</a>
+                                    <a href="javascript:;" attr-message="权限资源{$v.sm_name}" attr-id="{$v.sm_id}" class="btn label label-danger attr-del">删除</a>
+                                </td>
+                            </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script>
+    var SCOPE = {
+        'del_url':'{:url("admin/systemMenu/systemmenu_delete")}'
+    }
+</script>
+{/block}

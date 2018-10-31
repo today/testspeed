@@ -1,0 +1,151 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+<link rel="stylesheet" href="__PUBLIC__/css/my.css">
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="signupForm" method="post">
+                        <p style="color:red;">非专业人员请勿修改！！！</p>
+                        <input type="hidden" name="id" value="{$menus.sm_id}">
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">权限名称</label>
+                            <div class="col-lg-7"><input type="text" value="{$menus.sm_name}" datatype="*" name="rolename" class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">所属分组</label>
+                            <div class="col-sm-7"><select class="form-control m-b"datatype="*" nullmsg="请选择所属角色！" errormsg="请选择所属角色！" name="rolegroup">
+                                <option value="">请选择分组</option>
+                                {foreach $rolemenu as $k=>$v}
+                                <option value="{$k}" {if $menus.sm_group eq $k} selected {/if} >{$v}</option>
+                                {/foreach}
+                            </select></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">添加权限码</label>
+                            <div class="col-sm-7">
+                                <div class="col-sm-5" style="padding-left: 0">
+                                    <select class="form-control m-b" onchange="get_act_list(this)" id="controller">
+                                    <option value="">请选择角色</option>
+                                        {foreach $planList as $v}
+                                    <option value="{$v}">{$v}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-5" >
+                                    <select class="form-control m-b" id="action-list">
+                                    <option value="">请选择角色</option>
+                                    </select>
+                                </div>
+                                <a href="javascript:;" class="btn btn-default col-sm-1 bg-muted" onclick="add_list()">添加</a>
+                            </div>
+
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <!--权限码列表-->
+                        <div class="form-group" ><label class="col-lg-2 control-label">权限码</label>
+                            <div class="col-lg-7" id="rightList" style="padding-left: 0">
+                                {if $menus}
+                                {foreach $menus.right as $v}
+                                <div class="col-lg-12 rightList" >
+                                    <div class="col-sm-10"><input type="text" name='rights[]' value="{$v}"  class="form-control"></div>
+                                    <a href="javascript:;" class="btn btn-default col-sm-1 bg-danger" onclick="$(this).parent('.rightList').remove()">删除</a>
+                                </div>
+                                {/foreach}
+                                {/if}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">确认提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+    var SCOPE ={
+        'ajax_url':'{:url("system_menu/ajax_get_action")}'
+    }
+</script>
+<script src="__PUBLIC__/js/Validform_v5.3.2_min.js"></script>
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+
+<script>
+    //<!--表单验证-->
+    $(document).ready(function(){
+        $('#signupForm').Validform({
+            tiptype:2,
+            beforeSubmit:function(data){
+               if(!$("input[name='rights[]']").val()){
+                   layer.msg('权限码不能为空!',{icon:2,time:1500});
+                   return false;
+               };
+                return true;
+            }
+        });
+    })
+
+//    ajax 获取控制器方法
+    function get_act_list(obj){
+        $.ajax({
+            url:SCOPE.ajax_url,
+            type:'post',
+            data:{'controller':$(obj).val()},
+            dataType:'html',
+            success:function(msg){
+                $('#action-list').empty().append(msg);
+            }
+        })
+    };
+
+    //点击添加权限码
+    function add_list(){
+        var list=[]; //保存当前权限码
+       $('.rightList .form-control').each(function(i,o){
+            if($(o).val()!=''){
+                list.push($(o).val())
+            };
+        })
+
+        var con = $('#controller').val();//当前权限控制器
+        if(con !== ''){
+            var temp = con+'@'+$('#action-list').val(); //权限码
+            if($.inArray(temp,list) != -1){  //判断是否已存在
+                layer.msg('此权限码已经添加！', {icon: 2,time:2000});
+                return false;
+            }
+        }
+        var strtr = '<div class="col-lg-12 rightList">';
+        if(con!==''){
+            strtr += '<div class="col-sm-10"><input type="text" name=\'rights[]\' value="'+ con+'@'+$('#action-list').val()+'" class="form-control"></div>'
+        }else{
+            strtr += '<div class="col-sm-10"><input type="text" name=\'rights[]\' value="" class="form-control"></div>'
+        }
+        strtr +='<a href="javascript:;" class="btn btn-default col-sm-1 bg-danger" onclick="$(this).parent(\'.rightList\').remove()">删除</a></div>';
+
+        $('#rightList').append(strtr);//添加权限码节点
+    }
+</script>
+{/block}

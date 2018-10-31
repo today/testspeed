@@ -1,0 +1,77 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                    <div class="row">
+
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>矿产名称</th>
+                            <th>数量</th>
+                            <th>已挖</th>
+                            <th>生成时间</th>
+                            <th>记录</th>
+                            <th>用户</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $list as $v}
+                        <tr>
+                            <td>{$v['ai_id']}</td>
+                            <td>{$v['tok_name']}</td>
+                            <td>{$v['ai_number']}</td>
+                            <td>{if $v['ai_status']==1}是{else/}否{/if}</td>
+                            <td>{$v['ai_create_time']}</td>
+                            <td>{$v['ai_content']}</td>
+                            <td>{$v['usr_nickname']}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                    <!--分页 -->
+                    {$page|raw}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-form" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row" id="show-row">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script>
+    var SCOPE ={
+        'get_url':'{:url("admin/user/get_by_user")}'
+    }
+
+
+</script>
+{/block}

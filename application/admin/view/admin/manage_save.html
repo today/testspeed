@@ -1,0 +1,88 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+<link rel="stylesheet" href="__PUBLIC__/css/my.css">
+<link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="signupForm" action="" method="post">
+                        <p>管理员密码默认为 <span style="color:red;">000000</span>，添加成功后请尽快修改.</p>
+                        <input type="hidden" name="adm_id" value="{$manage.adm_id}">
+                        {:token()}
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">管理账号</label>
+                            <div class="col-lg-7"><input type="text" name="adm_username" value="{$manage.adm_username}" placeholder="请输入添加账号，5-20位字符串不包含特殊字符" datatype="/^\w{5,20}$/g" nullmsg="请填写账号" errormsg="注册账号为5-20位，不包含特殊字符"  {if $manage == null} ajaxurl="{:url('admin/ajax_by_manage')}" {else/} disabled {/if} class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">管理员手机</label>
+                            <div class="col-lg-7"><input type="text" name="adm_phone" value="{$manage.adm_phone}" datatype="m" errormsg="请输入您的手机号码！"  placeholder="请填入联系电话" class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        {if !$manage.adm_id || $manage.adm_id gt 1}
+                        <div class="form-group"><label class="col-lg-2 control-label">管理员状态</label>
+                            <div class="col-lg-7">
+                            <div class="i-checks col-lg-1"><label> <input type="radio" checked="" value="0" name="adm_status"> <i></i> 禁用</label></div>
+                                <div class="i-checks col-lg-1"><label> <input type="radio" value="1" name="adm_status"> <i></i> 启用 </label></div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">所属角色</label>
+                            <div class="col-sm-7"><select class="form-control m-b" name="adm_role" datatype="*" nullmsg="请选择所属角色！" errormsg="请选择所属角色！" name="account">
+                                <option value="">请选择角色</option>
+                                {foreach $roles as $vo}
+                                <option value="{$vo.role_id}" {if $manage.adm_role == $vo.role_id} selected {/if}>{$vo.role_name}</option>
+                                {/foreach}
+                            </select></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        {/if}
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">确认提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/Validform_v5.3.2_min.js"></script>
+<!-- iCheck -->
+<script src="__PUBLIC__/js/plugins/iCheck/icheck.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+
+        $('#signupForm').Validform({
+            tiptype:2,
+
+            beforeSubmit:function(){
+              return true;
+            }
+        });
+    })
+</script>
+{/block}

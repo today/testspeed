@@ -1,0 +1,67 @@
+
+<!-- Mainly scripts -->
+<script src="__PUBLIC__/js/jquery-3.1.1.min.js"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js"></script>
+<script src="__PUBLIC__/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="__PUBLIC__/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="__PUBLIC__/js/inspinia.js"></script>
+
+<!--&lt;!&ndash; Toastr &ndash;&gt;-->
+    <!--<script src="__PUBLIC__/js/plugins/toastr/toastr.min.js"></script>-->
+
+<!--<script>-->
+    <!--$(document).ready(function() {-->
+        <!--setTimeout(function () {-->
+            <!--toastr.options = {-->
+                <!--closeButton: true,-->
+                <!--progressBar: true,-->
+                <!--showMethod: 'slideDown',-->
+                <!--timeOut: 4000-->
+            <!--};-->
+            <!--toastr.success('这是一个神奇的网站', '欢迎登录');-->
+
+        <!--}, 1300);-->
+
+    <!--})-->
+<!--</script>-->
+<script>
+    //清除缓存方法
+    function hotAllClear(){
+        $.get("{:url('admin/system/allClear')}",{'status':1},function(msg){
+
+        });
+    }
+
+    $(document).ready(function(){
+
+      var nav_info = "{$navigation??''}";
+      if(nav_info!=''){
+          $('#'+nav_info).parents('li').addClass('active');
+          $('#'+nav_info).addClass('active');
+              $('#'+nav_info).parent('ul').addClass('in');
+      }
+    })
+
+
+//    点击提示
+    $('#checkZoom').click(function(){
+        if($('#explanation').hasClass('active')){
+            $('#explanation').removeClass('active');
+        }else{
+            $('#explanation').addClass('active');
+        }
+    })
+</script>
+<script>
+//    $(document).ready(function(){
+//      var nav_info = "<?//=isset($navigation)?$navigation:''?>//";
+//      if(nav_info!=''){
+//          $('#'+nav_info).addClass('active');
+//          if($('#'+nav_info).parents('li')){
+//              $('#'+nav_info).parents('li').addClass('active');
+//              $('#'+nav_info).parent('ul').addClass('in');
+//          }
+//
+//      }
+//    })
+</script>

@@ -1,0 +1,85 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                    <div class="ibox-tools" >
+                        <a style="border:1px solid #b4b6b8;padding:5px;" href="{:url('system/add_inform')}" >
+                            发布通知
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th width="30">ID</th>
+                            <th width="150">发布时间</th>
+                            <th width="100">发布账号</th>
+                            <th>内容</th>
+                            <th>状 态</th>
+                            <th>操 作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $list as $k=>$v}
+                        <tr>
+                            <td>{$v.if_id}</td>
+                            <td>{$v.if_create_time}</td>
+                            <td>{$v.if_person}</td>
+                            <td>{$v.if_content}</td>
+                            <td class="update_inform">{$k==0?$v.if_status:'禁用'}</td>
+                            <td>
+                                {if $k==0}
+                                <a href="javascript:;" onclick="update_inform(this)" attr_id="{$v.if_id}" attr_s="{$v->getData('if_status')}" attr_status="{$v->getData('if_status') ==1 ? -1 : 1}">{$v->getData('if_status') == 1 ? '禁用':'开启'}</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+
+                    <!--分页-->
+                    {$page|raw}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script>
+    var SCOPE ={
+        'url_status':'{:url("system/update_inform")}'
+    }
+
+    function update_inform(object){
+        var status = $(object).attr('attr_status');
+        var id = $(object).attr('attr_id');
+        var url = SCOPE.url_status;
+        var inform = $(object).parents('tr').find('.update_inform').html();
+        var info = $(object).html();
+        var s = $(object).attr('attr_s');
+        $.post(url,{'status':status,'id':id},function(msg){
+            if(msg.code == 1){
+                $(object).parents('tr').find('.update_inform').html(info);
+                $(object).html(inform).attr('attr_status',s);
+                $(object).attr('attr_s',status);
+            }else{
+                dialog.error(msg.msg);
+            }
+        })
+    }
+</script>
+{/block}

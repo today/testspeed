@@ -1,0 +1,71 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                    <div class="ibox-tools" >
+                        <a style="border:1px solid #b4b6b8;padding:5px;" href="{:url('admin/manage_save')}" >
+                            添加管理员
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>账 号</th>
+                            <th>手 机</th>
+                            <th>权 限</th>
+                            <th>状 态</th>
+                            <th>最近登录时间</th>
+                            <th>最近登录ip</th>
+                            <th>操 作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $list as $v}
+                        <tr>
+                            <td>{$v.adm_id}</td>
+                            <td>{$v.adm_username}</td>
+                            <td>{$v.adm_phone}</td>
+                            <td>{$v.role.role_name}</td>
+                            <td>{$v.adm_status}</td>
+                            <td>{$v.adm_last_login}</td>
+                            <td>{$v.adm_last_ip}</td>
+                            <td>
+                                <a href="{:url('admin/admin/manage_save',['id'=>$v.adm_id])}" class="btn label label-info">编辑</a>
+                                {if $v.adm_id gt 1}
+                                <a href="javascript:;" attr-message="管理员：{$v.adm_username}" attr-id="{$v.adm_id}"  class="btn label label-danger attr-del">删除</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script>
+    var SCOPE ={
+        'del_url':'{:url("admin/admins/manage_delete")}'
+    }
+
+</script>
+{/block}

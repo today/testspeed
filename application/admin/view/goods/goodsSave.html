@@ -1,0 +1,259 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+<link rel="stylesheet" href="__PUBLIC__/css/my.css">
+<link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">添加</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="goods" action="{$list['id'] ? url('goodsUpdate') : ''}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="{$list['id']}">
+                        {:token()}
+                        <div class="form-group"><label class="col-lg-2 control-label">厂家</label>
+                            <div class="col-lg-2">
+                                <select class="form-control m-b" name="factory_id" readonly="true" errormsg="请选择厂家">
+                                    {foreach $factory as $a}
+                                    <option value="{$a['id']}" {if condition="$a['id']== $list['factory_id']"} selected {/if} >{$a['name']}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">品牌</label>
+                            <div class="col-lg-2">
+                                <select class="form-control m-b" name="brand_id" readonly="true" errormsg="请选择品牌">
+                                    {foreach $brandlist as $b}
+                                    <option value="{$b['id']}" {if condition="$b['id']== $list['brand_id']"} selected {/if} >{$b['name']}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                          <div class="form-group"><label class="col-lg-2 control-label">分类</label>
+                        <div class="col-lg-2">
+                            <select class="form-control m-b" name="category_id" readonly="true" errormsg="请选择分类">
+                                 {foreach $categorylist as $c}
+                                    <option value="{$c['id']}" {if condition="$c['id'] == $list['category_id']"} selected {/if}>{$c['name']}</option>
+                                    {/foreach}
+                            </select>
+                        </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">商品名称</label>
+                            <div class="col-lg-7"><input type="text" name="name" value="{$list['name']}" placeholder="请输入商品名称" datatype="*" nullmsg="名称不能为空"   class="form-control" required></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">缩略图</label>
+                            <div class="col-lg-7"><input type="file" name="image" value="" ></div>
+                            <img src="/{$list['image']}" id="fff" alt="" width="50">
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div id="file">
+                        <div class="form-group"><label class="col-lg-2 control-label">详情图</label>
+                            <div class="col-lg-7"><input type="file" name="dimage[]" value=""></div>
+                            {if condition="$has = 1"}
+                            {foreach $filesImage as $key=>$val}
+                            <label id="{$key}">
+                            <img src="/{$val}" alt="" width="50">
+                            <a class="delete" value="{$key}" gid="{$list['id']}">删除</a>
+                            </label>
+                            {/foreach}
+                            {/if}
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        </div>
+                        <div class="form-group"><label class="col-lg-2 control-label"></label>
+                            <div class="col-lg-7"><input type="button" name="" id="addfile" value="继续添加"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">价格(￥)</label>
+                            <div class="col-lg-7"><input type="text" name="price" value="{$list['price']}" placeholder="请输入商品价格"   class="form-control" required></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">原价(￥)</label>
+                            <div class="col-lg-7"><input type="text" name="original_price" value="{$list['original_price']}" placeholder="请输入商品原价"   class="form-control"></div>
+                            <div class="Validform_checktip">为空则默认为0</div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">赠送酿力</label>
+                            <div class="col-lg-7"><input type="number" name="brewing_power" value="{$list['brewing_power']}" placeholder="请输赠送酿力值"   class="form-control" required></div>
+                            <div class="Validform_checktip">填写数字</div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">状态</label>
+                            <div class="col-lg-7">
+                                <div class="i-checks col-lg-1"><label> <input type="radio" value="0" name="is_use"> <i></i> 上架</label></div>
+                                <div class="i-checks col-lg-1"><label> <input type="radio" value="1" name="is_use" checked=""> <i></i> 下架 </label></div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">热销</label>
+                            <div class="col-lg-7">
+                                <div class="i-checks col-lg-1"><label> <input type="radio" checked="" value="0" name="is_hot"> <i></i> 否</label></div>
+                                <div class="i-checks col-lg-1"><label> <input type="radio" value="1" name="is_hot"> <i></i> 是 </label></div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                         <!--<div class="form-group"><label class="col-lg-2 control-label">单位</label>
+                            <div class="col-lg-2">
+                               <select class="form-control m-b" name="unit" readonly="true" errormsg="请选择单位">
+                                <option value="瓶">瓶</option>
+                                <option value="箱">箱</option>
+                                <option value="盒">盒</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>-->
+                        <div class="form-group"><label class="col-lg-2 control-label">单位</label>
+                        <div class="col-lg-7"><input type="text" name="unit" value="{$list['unit']}"  class="form-control" required></div>
+                        <div class="Validform_checktip"></div>
+                    </div>
+
+                        <div class="hr-line-dashed"></div>
+                         <div class="form-group"><label class="col-lg-2 control-label">度数</label>
+                            <div class="col-lg-7">
+                               <input type="text" name="degree" class="form-control" value="{$list['degree']}">%vol
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                         <div class="form-group"><label class="col-lg-2 control-label">规格</label>
+                            <div class="col-lg-2">
+                                 <select class="form-control m-b" name="specification" readonly="true" errormsg="请选择规格">
+                                <option value="1X2" {if condition="$list['specification'] == '1X2'"} selected {/if}>1X2</option>
+                                <option value="1X3" {if condition="$list['specification'] == '1X3'"} selected {/if}>1X3</option>
+                                <option value="1X4" {if condition="$list['specification'] == '1X4'"} selected {/if}>1X4</option>
+                                <option value="1X6" {if condition="$list['specification'] == '1X6'"} selected {/if}>1X6</option>
+                                <option value="1X8" {if condition="$list['specification'] == '1X8'"} selected {/if}>1X8</option>
+                                <option value="1X10" {if condition="$list['specification'] == '1X10'"} selected {/if}>1X10</option>
+                                <option value="1X12" {if condition="$list['specification'] == '1X12'"} selected {/if}>1X12</option>
+                                <option value="1X24" {if condition="$list['specification'] == '1X24'"} selected {/if}>1X24</option>
+                                <option value="1X48" {if condition="$list['specification'] == '1X48'"} selected {/if}>1X48</option>
+                                 <option value="1X6X6" {if condition="$list['specification'] == '1X6X6'"} selected {/if}>1X6X6</option>
+                                     <option value="100ml" {if condition="$list['specification'] == '100ml'"} selected {/if}>100ml</option>
+                                     <option value="250ml" {if condition="$list['specification'] == '250ml'"} selected {/if}>250ml</option>
+                                     <option value="300ml" {if condition="$list['specification'] == '300ml'"} selected {/if}>300ml</option>
+                                     <option value="365ml" {if condition="$list['specification'] == '365ml'"} selected {/if}>365ml</option>
+                                 <option value="500ml" {if condition="$list['specification'] == '500ml'"} selected {/if}>500ml</option>
+                                 <option value="750ml" {if condition="$list['specification'] == '750ml'"} selected {/if}>750ml</option>
+                                 <option value="2X250ml" {if condition="$list['specification'] == '2X250ml'"} selected {/if}>2X250ml</option>
+                            </select>
+                            </div>
+                        </div>
+                        <!--<div class="form-group"><label class="col-lg-2 control-label">规格</label>
+                            <div class="col-lg-7"><input type="text" name="specification" value="{$list['specification']}"  class="form-control" required></div>
+                            <div class="Validform_checktip"></div>
+                        </div>-->
+                        <div class="hr-line-dashed"></div>
+                         <div class="form-group"><label class="col-lg-2 control-label">产地</label>
+                            <div class="col-lg-7">
+                               <input type="text" name="chandi" class="form-control" value="{$list['chandi']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">详情</label>
+                        
+                            <script id="container" name="detail" type="text/plain">
+                                
+                                {$list['detail']|raw}
+                            </script>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">确认提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/Validform_v5.3.2_min.js"></script>
+<!-- iCheck -->
+<script src="__PUBLIC__/js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+<script type="text/javascript" src="__PUBLIC__/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js"></script>
+<script type="text/javascript">
+        var ue = UE.getEditor('container');
+    </script>
+<script>
+    $(document).ready(function(){
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+
+        $('#signupForm').Validform({
+            tiptype:2,
+
+            beforeSubmit:function(){
+                return true;
+            }
+        });
+    })
+
+
+    function power_img(obj){
+        var x =document.getElementById('file_img');
+        if(!x && !x.value()) return;
+        var path = /\.jpg$|\.jpeg$|\.gif$|\.png$/;
+        if(path.test(x.value)){
+            document.getElementById('fff').src=window.URL.createObjectURL(obj.files[0]);
+        }else{
+            x.value = '';
+            alert('请选择图片!');
+        }
+    }
+
+    /*$("#pickfile").change(function(){
+     var index = layer.load(0, {shade: 0.1});
+
+     });*/
+    $("#addfile").click(function(){
+        var html = '<div class="form-group"><label class="col-lg-2 control-label"></label> <div class="col-lg-7"><input type="file" name="dimage[]" value=""></div> </div>';
+        $("#file").append(html);
+     });
+    $(".delete").click(function(){
+        var id = $(this).attr('gid');
+        var key = $(this).attr('value');
+        $.ajax({
+            type : "POST",
+            url: '/admin/goods/deleteImages',
+            dataType: "json",
+            data:{
+                key: key,
+                id: id
+            },
+            success: function(data){
+                if(data.code == 200){
+                    $("#"+key).empty();
+                    layer.msg(data.msg);
+                }else{
+                    layer.msg(data.msg);
+                }
+            }
+        });
+     });
+</script>
+{/block}

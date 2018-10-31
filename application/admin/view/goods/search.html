@@ -1,0 +1,177 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+
+{/block}
+
+{block name="main"}
+<style>
+    .input-group .form-control, .input-group-addon, .input-group-btn {
+        margin: 10px 10px 0px 0px;
+        width: 20%;
+        display: table-cell;
+    }
+    .input-group-btn{
+        width: 10%;
+    }
+    .btn-group-sm>.btn, .btn-sm {
+        padding: 5px 40px;
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 5px;
+    }
+</style>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">商品</h5>
+                    <div class="col-sm-3 navbar-right"  style=" margin-bottom: 20px;width: 99%;">
+                        <form action="/admin/goods/search" method="post">
+                            <div class="input-group">
+                                <input type="text" name="name" value="{$param.name}" placeholder="商品名称" class="input-sm form-control">
+                                <select  name="is_use" class="input-sm form-control input-s-sm inline">
+                                    <option value="">请选择上架状态</option>
+                                    <option value="yes" {if condition="$param.is_use == 'yes'"} selected {/if}>上架</option>
+                                    <option value="no" {if condition="$param.is_use == 'no'"} selected {/if}>下架</option>
+                                </select>
+                                <select  name="is_hot" class="input-sm form-control input-s-sm inline">
+                                    <option value="">请选择热销状态</option>
+                                    <option value="no" {if condition="$param.is_hot == 'no'"} selected {/if}>否</option>
+                                    <option value="yes" {if condition="$param.is_hot == 'yes'"} selected {/if}>是</option>
+                                </select>
+                                <select name="category_id" class="input-sm form-control input-s-sm inline">
+                                    <option value="">请选择分类</option>
+                                    {foreach $category as $v}
+                                    <option value="{$v.id}" {if condition="$param.category_id == $v.id"} selected {/if}>{$v.name}</option>
+                                    {/foreach}
+                                </select>
+                                <select name="brand_id" class="input-sm form-control input-s-sm inline">
+                                    <option value="">请选择品牌</option>
+                                    {foreach $brand as $v}
+                                    <option value="{$v.id}" {if condition="$param.brand_id == $v.id"} selected {/if}>{$v.name}</option>
+                                    {/foreach}
+                                </select>
+                                <select id="select-type" name="factory_id" class="input-sm form-control input-s-sm inline">
+                                    <option value="">请选择厂家</option>
+                                    {foreach $factory as $v}
+                                    <option value="{$v.id}" {if condition="$param.factory_id == $v.id"} selected {/if}>{$v.name}</option>
+                                    {/foreach}
+                                </select>
+                                <input type="text" class="input-sm form-control" placeholder="请选择开始日期" value="{$param.start_time}" name="start_time" id="start_time" autocomplete="off">
+                                <input type="text" class="input-sm form-control" placeholder="请选择结束日期" value="{$param.end_time}" name="end_time" id="end_time" autocomplete="off">
+                                    <span class="input-group-btn">
+                                            <button type="submit"  class="btn btn-sm btn-primary"> 搜索</button>
+                                    </span>
+                                    <span class="input-group-btn" style="padding-left: 10px;">
+                                            <a href="/admin/goods/index" class="btn btn-sm btn-primary">清除</a>
+                                    </span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="ibox-tools">
+                        <a style="border:1px solid #b4b6b8;padding:5px;" href="{:url('Goods/goodsSave')}" >
+                            添加商品
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>名称</th>
+                            <th>图片</th>
+                            <th>价格</th>
+                            <th>原价</th>
+                            <th>酿力</th>
+                            <th>状态</th>
+                            <th>热销</th>
+                            <th>分类</th>
+                            <th>品牌</th>
+                            <th>厂家</th>
+                            <th>规格</th>
+                            <th>时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $list as $v}
+                        <tr>
+                            <td>{$v.id}</td>
+                            <td>{$v.name}</td>
+                            <td><img src="/{$v.image}" width="30" alt=""></td>
+                            <td>{$v.price}</td>
+                            <td>{$v.original_price}</td>
+                            <td>{$v.brewing_power}</td>
+                            <td><a class="status" id="{$v.id}" status="{$v.is_use}">{$v.is_use == 0 ? '上架':'下架'}</a></td>
+                            <td>{$v.is_hot == 0 ? '否':'是'}</td>
+                            <td>{$v.category_name}</td>
+                            <td>{$v.brand_name}</td>
+                            <td>{$v.factory_name}</td>
+                            <td>{$v.specification}</td>
+                            <td>{$v.created_at}</td>
+                            <td>
+                                <a href="{:url('Goods/goodsSave',['id'=>$v.id])}" class="btn label label-info">编辑</a>
+                                <a href="javascript:;" attr-message="商品：{$v.name}"  attr-id="{$v.id}"  class="btn label label-danger attr-del">删除</a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                    {$page|raw}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script src="__PUBLIC__/laydate/laydate.js"></script>
+<script>
+    laydate.render({
+        elem: '#start_time' //指定元素
+    });
+    laydate.render({
+        elem: '#end_time' //指定元素
+    });
+</script>
+<script>
+    var SCOPE ={
+        'del_url':'{:url("admin/Goods/delete")}'
+    }
+    $(".status").click(function(){
+        that = $(this);
+        var id = $(this).attr('id');
+        var status = $(this).attr('status');
+        $.ajax({
+            type : "POST",
+            url: '/admin/goods/status',
+            dataType: "json",
+            data:{
+                id: id
+            },
+            success: function(data){
+                if(data.code == 200){
+                    that.empty();
+                    if(status == 0){
+                        that.append('下架');
+                        that.attr('status',1);
+                    }
+                    if(status == 1){
+                        that.append('上架');
+                        that.attr('status',0);
+                    }
+                    layer.msg(data.msg);
+                }else{
+                    layer.msg(data.msg);
+                }
+            }
+        });
+    });
+</script>
+{/block}

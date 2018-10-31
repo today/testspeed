@@ -1,0 +1,136 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <section>
+        <div class="row m-t-sm">
+            <div class="col-lg-12">
+                <div class="panel blank-panel">
+                    <div class="panel-heading">
+                        <div class="panel-options">
+                            <ul class="nav nav-tabs">
+                                <li style="padding-right: 30px"><h5 style="font-size: 18px;">用户咨询</h5></li>
+                                {foreach name="group_list" item='group' key='kk'}
+                                <li {if condition="$kk eq $back_type "} class='active' {/if} ><a href="{:url('UserContent/index',['back_type'=>$kk])}" >{$group}</a></li>
+                                {/foreach}
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div id="explanation" class="explanation" style="">
+            <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o" style="color:gold"></i>
+                <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+                <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+            </div>
+            <ul>
+                <li>网站信息修改后，请清除缓存</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <div class="ibox-content">
+            <table class="table" style="table-layout: fixed;">
+                <thead>
+                <tr>
+                    <th style="width:10px;" class=""><i class="fa fa-star text-red"></i></th>
+                    <th>咨询人</th>
+                    <th>手机号</th>
+                    <th>邮箱</th>
+                    <th>咨询内容</th>
+                    <th>状态</th>
+                    {if $back_type eq 1}
+                    <th>处理内容</th>
+                    <th>处理时间</th>
+                    {/if}
+                    <th>咨询时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $list as $vo}
+                <tr>
+                    <td><i class="fa fa-star {$vo.uq_star|textColorArray}" onclick="updateStar(this)" style="font-size: 15px;"></i></td>
+                    <td>{$vo.uq_nickname}</td>
+                    <td>{$vo.uq_phone}</td>
+                    <td>{$vo.uq_email}</td>
+                    <td onclick="clickContent(this)" attr-name = "【 {$vo.uq_nickname} 】用户咨询内容" style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{$vo.uq_content}</td>
+                    {if $back_type eq 0}
+                    <td>
+                        <div class="btn-group">
+                            <button style="font-size: 15px;" data-toggle="dropdown" attr-status="0"   class="btn label {$vo.uq_status|colorArray}">{$vo.uq_status}<span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="javascript:;" onclick="promptAnswer(this)" attr-status="1" attr-id="{$vo['uq_id']}">已处理</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    {else/}
+                    <td>
+                        <button style="font-size: 15px;" data-toggle="dropdown" attr-status="0"   class="btn label {$vo.uq_status|colorArray}">{$vo.uq_status}</button>
+                    </td>
+                    <td onclick="clickContent(this)" attr-name = "【 {$vo.uq_nickname} 】处理内容" style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{$vo.uq_answer}</td>
+                    <td>{$vo.uq_time}</td>
+                    {/if}
+                    <!--<td>{$vo.uq_status}</td>-->
+                    <td>{$vo.uq_handling_time}</td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+{/block}
+
+{block name="js"}
+<script>
+    var SCOPE={
+        'url_status':'{:url("userContent/ajaxUpdateStatus")}',
+    }
+</script>
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script>
+    function updateStar(obj){
+        $(obj).removeClass('text-danger');
+    }
+
+    function clickContent(obj){
+       var va = $(obj).html();
+       var name = $(obj).attr('attr-name');
+        layer.alert(va, {title:name});
+    }
+
+    function promptAnswer(obj){
+        var id = $(obj).attr('attr-id');
+        layer.prompt({title: '请输入处理记录！', formType: 2}, function(answer, index){
+            layer.close(index);
+            $.ajax({
+                url:SCOPE.url_status,
+                data:{'id':id,'value':1,'answer':answer},
+                dataType:'json',
+                type:'post',
+                success:function(msg){
+                    if(msg.code == 1){
+                        $(obj).parents('tr').remove();
+                        layer.msg(msg.msg);
+                    }else{
+                        layer.msg('修改失败！');
+                    }
+                },
+                error:function(){
+                    layer.msg('修改失败！');
+                }
+            })
+
+        });
+    }
+</script>
+{/block}

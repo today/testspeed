@@ -1,0 +1,59 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>账 号</th>
+                            <th>内 容</th>
+                            <th>ip</th>
+                            <th>时 间</th>
+                            <th>路 径</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $list as $v}
+                        <tr>
+                            <td>{$v.log_id}</td>
+                            <td>{$v.log_admin_username}</td>
+                            <td>{$v.log_info}</td>
+                            <td>{$v.log_ip}</td>
+                            <td>{$v.log_time}</td>
+                            <td>{$v.log_url}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+
+                    <!--分页位置-->
+                    {$page|raw}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script>
+    var SCOPE ={
+        'del_url':'{:url("admin/admins/manage_delete")}'
+    }
+
+</script>
+{/block}

@@ -1,0 +1,92 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+<link rel="stylesheet" href="__PUBLIC__/css/my.css">
+<link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="signupForm" action="" method="post">
+                        {:token()}
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">版本号</label>
+                            <div class="col-lg-7"><input type="text" name="vs_version" value="" placeholder="请输入更新版本号" nullmsg="请输入更新版本号！"  datatype="*"  class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">更新地址</label>
+                            <div class="col-lg-7"><input type="text" name="vs_url" value="" datatype="/^http|https/" errormsg="请输入版本更新地址！" class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">更新简介</label>
+                            <div class="col-lg-7"><input type="text" name="vs_desc" value="" datatype="*" placeholder="请输入更新简介！" class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">更新端</label>
+                            <div class="col-sm-7"><select class="form-control m-b" name="vs_type" datatype="*" nullmsg="请选择所属端！" errormsg="请选择所属端！" >
+                                <option value="">请选择更新端</option>
+                                <option value="android">Android</option>
+                                <option value="ios" >IOS</option>
+                            </select></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">是否强制</label>
+                            <div class="col-lg-7">
+                                <div class="i-checks col-lg-2"><label> <input type="radio" checked="" value="-1" name="vs_force_update"> <i></i> 不强制</label></div>
+                                <div class="i-checks col-lg-2"><label> <input type="radio" value="1" name="vs_force_update"> <i></i> 强制</label></div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">确认提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/Validform_v5.3.2_min.js"></script>
+<!-- iCheck -->
+<script src="__PUBLIC__/js/plugins/iCheck/icheck.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+
+        $('#signupForm').Validform({
+            tiptype:2,
+
+            beforeSubmit:function(){
+              return true;
+            }
+        });
+    })
+</script>
+{/block}

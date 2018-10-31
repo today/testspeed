@@ -1,0 +1,73 @@
+{extend name="layout/layout" /}
+
+{block name="css" }
+
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <section>
+        <div id="explanation" class="explanation" style="">
+            <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o" style="color:gold"></i>
+                <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+                <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+            </div>
+            <ul>
+                <li>一个用户对应一个角色，每个角色有自己独有的权限</li>
+            </ul>
+        </div>
+    </section>
+    <section>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5 style="font-size: 18px;">{$title}</h5>
+                        <div class="ibox-tools" >
+                            <a style="border:1px solid #b4b6b8;padding:5px;" href="{:url('admin/role_create')}" >
+                                <i class="fa fa-plus"></i>  添加角色
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>名 称</th>
+                                <th>描 述</th>
+                                <th>操 作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach $list as $vo}
+                            <tr>
+                                <td>{$vo.role_id}</td>
+                                <td>{$vo.role_name}</td>
+                                <td>{$vo.role_desc}</td>
+                                <td>
+                                    <a href="{:url('admin/admin/role_create',['id'=>$vo.role_id])}" class="btn label label-info">编辑</a>
+                                    <a href="javascript:;" class="btn label label-danger attr-del" attr-id="{$vo.role_id}" attr-message="{$vo.role_name}">删除</a>
+                                </td>
+                            </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script>
+    var SCOPE = {
+        'del_url':'{:url("admin/admin/role_delete")}'
+    }
+</script>
+{/block}

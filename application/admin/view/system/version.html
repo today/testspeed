@@ -1,0 +1,64 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                    <div class="ibox-tools" >
+                        <a style="border:1px solid #b4b6b8;padding:5px;" href="{:url('system/add_version')}" >
+                            发布新版本
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table" style="table-layout: fixed;">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>版本</th>
+                            <th>下载地址</th>
+                            <th>备注</th>
+                            <th>Android/ios</th>
+                            <th>发布时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $list as $v}
+                        <tr>
+                            <td>{$v.vs_id}</td>
+                            <td>{$v.vs_version}</td>
+                            <td onclick="clickDescription(this)" attr-name="{$v.vs_version}" style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{$v.vs_url}</td>
+                            <td onclick="clickDescription(this)" attr-name="{$v.vs_version}" style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{$v.vs_desc}</td>
+                            <td>{$v.vs_type}</td>
+                            <td>{$v.vs_create_time}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/layer/layer.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script>
+
+    function clickDescription(obj){
+        var va = $(obj).html();
+        var name = $(obj).attr('attr-name');
+        layer.alert(va, {title:name});
+    }
+</script>
+{/block}

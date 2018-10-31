@@ -1,0 +1,101 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+<link rel="stylesheet" href="__PUBLIC__/css/my.css">
+<link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">{$title}</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="signupForm" action="{$list['tok_id'] ? url('token_update') : ''}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="tok_id" value="{$list['tok_id']}">
+                        {:token()}
+                        <div class="form-group"><label class="col-lg-2 control-label">token名称</label>
+                            <div class="col-lg-7"><input type="text" name="tok_name" value="{$list['tok_name']}" placeholder="请输入token名称 例:btc" datatype="*" nullmsg="token名称不能为空"  {if($list['tok_id'])} disabled {else/}ajaxurl="{:url('tokens/ajax_by_token')}"{/if}   class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">token图标</label>
+                            <div class="col-lg-7"><input type="file" name="file_img" value="" {if(!$list['tok_id'])} datatype="*" {/if} id="file_img" onchange="power_img(this)" nullmsg="请上传图标" errormsg="请上传token图标"  ></div>
+                            <img src="{$list['tok_img']}" id="fff" alt="" width="50">
+                            <div class="Validform_checktip"></div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">token官网</label>
+                            <div class="col-lg-7"><input type="text" name="tok_url" value="{$list['tok_url']}" datatype="empty|url" errormsg="请输入正确的网址！"  placeholder="请输入token官网网址" class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">token白皮书</label>
+                            <div class="col-lg-7"><input type="text" name="tok_book_url" value="{$list['tok_book_url']}" datatype="empty|url" errormsg="请输入正确的网址！"  placeholder="请输入白皮书网址" class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">token简介</label>
+                            <div class="col-lg-7"><textarea name="tok_content" id="" cols="70" rows="10" placeholder="在此处填入token简介">{$list['tok_content']}</textarea> </div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">确认提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/Validform_v5.3.2_min.js"></script>
+<!-- iCheck -->
+<script src="__PUBLIC__/js/plugins/iCheck/icheck.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+
+        $('#signupForm').Validform({
+            tiptype:2,
+
+            beforeSubmit:function(){
+              return true;
+            }
+        });
+    })
+
+
+    function power_img(obj){
+        var x =document.getElementById('file_img');
+        if(!x && !x.value()) return;
+        var path = /\.jpg$|\.jpeg$|\.gif$|\.png$/;
+        if(path.test(x.value)){
+            document.getElementById('fff').src=window.URL.createObjectURL(obj.files[0]);
+        }else{
+            x.value = '';
+            alert('请选择图片!');
+        }
+    }
+</script>
+{/block}

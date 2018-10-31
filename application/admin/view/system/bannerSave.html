@@ -1,0 +1,95 @@
+{extend name="layout/layout" /}
+
+{block name='css'}
+<link rel="stylesheet" href="__PUBLIC__/css/my.css">
+<link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
+{/block}
+
+{block name="main"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="font-size: 18px;">添加</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="banner" action="{$list['id'] ? url('bannerUpdate') : ''}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="{$list['id']}">
+                        {:token()}
+                        <div class="form-group"><label class="col-lg-2 control-label">链接</label>
+                            <div class="col-lg-7"><input type="text" name="link" value="{$list['link']}" placeholder="http://" datatype="*" nullmsg="不能为空"   class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">图片</label>
+                            <div class="col-lg-7"><input type="file" name="pic" value="" ></div>
+                            <img src="/{$list['pic']}" id="fff" alt="" width="50">
+                            <div class="Validform_checktip"></div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-lg-2 control-label">状态</label>
+                            <div class="col-lg-7">
+                                <div class="i-checks col-lg-1"><label> <input type="radio" checked="" value="0" name="is_show"> <i></i> 显示</label></div>
+                                <div class="i-checks col-lg-1"><label> <input type="radio" value="1" name="is_show"> <i></i> 隐藏 </label></div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-lg-2 control-label">排序</label>
+                            <div class="col-lg-7"><input type="number" name="asort" value="{$list['asort']}"   class="form-control"></div>
+                            <div class="Validform_checktip"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">确认提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/js/Validform_v5.3.2_min.js"></script>
+<!-- iCheck -->
+<script src="__PUBLIC__/js/plugins/iCheck/icheck.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+
+        $('#signupForm').Validform({
+            tiptype:2,
+
+            beforeSubmit:function(){
+                return true;
+            }
+        });
+    })
+
+
+    function power_img(obj){
+        var x =document.getElementById('file_img');
+        if(!x && !x.value()) return;
+        var path = /\.jpg$|\.jpeg$|\.gif$|\.png$/;
+        if(path.test(x.value)){
+            document.getElementById('fff').src=window.URL.createObjectURL(obj.files[0]);
+        }else{
+            x.value = '';
+            alert('请选择图片!');
+        }
+    }
+</script>
+{/block}

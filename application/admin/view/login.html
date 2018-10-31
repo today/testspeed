@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{$titles}</title>
+
+{include file='layout/css' /}
+
+</head>
+
+<body class="gray-bg ">
+
+    <div class="loginColumns animated fadeInDown">
+        <div class="row canvas" >
+
+            <div class="col-md-6">
+                <h2 class="font-bold">酒水全球管理后台</h2>
+
+                <p>
+                    酒水世界是一款基于区块链的挖矿小游戏！
+                </p>
+
+                <p>
+
+                </p>
+
+                <p>
+
+                </p>
+
+            </div>
+            <div class="col-md-6">
+                <div class="ibox-content">
+                    <form class="m-t" role="form" id="theForm" action="index.html">
+                        <div id="error"></div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="账号" name="username" required="">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="密码" name="password" required="">
+                        </div>
+
+                        <div class="form-group col-md-6" style="padding: 0">
+                            <input type="text" class="form-control " width="50%" placeholder="验证" name="captcha" required="">
+                        </div>
+                        <div class="form-group col-md-6" style="padding: 0">
+                            <img src="{:url('admin/captcha')}" id="imgVerify" class="col-lg-12"  style="padding-right: 0;height:35px" onclick="this.src=this.src+'?'+Math.random()" alt="">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
+                    </form>
+                    <p class="m-t">
+                        <small> Copyright 酒水全球 京ICP备 © 2017-2021</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <!--{include file="layout/foot" /}-->
+    </div>
+
+</body>
+<script src="__PUBLIC__/js/jquery-3.1.1.min.js"></script>
+
+<script src="__PUBLIC__/js/bootstrap.min.js"></script>
+
+<script>
+    $(function(){
+        $('#theForm').submit(function(e){
+            var ss =$('#theForm').serialize();
+            $.ajax({
+                async:false,
+                url:"{:url('admin/login')}",
+                data:ss,
+                type:'post',
+                dataType:'json',
+                success:function(res){
+                    if(res.code != 1){
+                        $('#error').html(' <div  class="alert alert-danger alert-dismissable "><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>'+res.msg+'</div>');
+                        fleshVerify();
+                    }else{
+                        $('#error').html(' <div  class="alert alert-success alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>'+res.msg+'</div>');
+                        top.location.href = res.url;
+                    }
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown) {
+                    $('#error').html(' <div  class="alert alert-danger alert-dismissable "><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>网络服务器出错，请稍后再试！</div>');
+                    fleshVerify();
+                }
+            });
+            return false;
+        });
+
+        //刷新验证码
+        function fleshVerify(){
+            $('#imgVerify').attr('src',"{:url('admin/captcha')}?r="+Math.floor(Math.random()*100));//重载验证码
+        }
+    });
+
+</script>
+</html>
